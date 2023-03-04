@@ -8,13 +8,17 @@ category = 'World'
 start_date = datetime(2023, 1, 1)
 end_date = datetime(2023, 2, 28)
 
+# end at index6.html
+# start from  index47.html
 
 # collect links from People's Daily
 def people_daily_links():
-    links = []
+
+    # url:date
+    links = {}
     # Iterate over pages until the end date is reached
-    page = 38
-    while True:
+    page = 47
+    while page >= 6:
         url = base_url + 'index{}.html'.format(page)
         response = requests.get(url)
         soup = BeautifulSoup(response.text, 'html.parser')
@@ -29,6 +33,10 @@ def people_daily_links():
             article_url = base_url + li.a['href']
             article_date_str = li.find('span').text.strip()
             article_date = datetime.strptime(article_date_str, '%Y-%m-%d %H:%M')
+
+            # Exclude articles published on 2023-03-01
+            if article_date.date() == datetime(2023, 3, 1).date():
+                continue
             
             print(f'URL: {article_url} and date: {article_date}')
             if article_date < start_date:
@@ -42,12 +50,9 @@ def people_daily_links():
                 links.append(article_url)
             """
 
-            links.append(article_url)
+            links[article_url] = article_date
 
-        # Check if we've reached the first page
-        if page == 1:
-            break
-
+        
         # Decrement the page number
         page -= 1
 
@@ -55,12 +60,12 @@ def people_daily_links():
 
 
 
-def scrape_articles(urls):
+def scrape_articles(links):
     with open('articles.csv', 'w', newline='', encoding='utf-8') as f:
         writer = csv.writer(f)
         writer.writerow(['Title', 'Text', 'Author', 'Date', 'Time'])
 
-        for url in urls:
+        for url in links:
             response = requests.get(url)
             soup = BeautifulSoup(response.text, 'html.parser')
 
@@ -78,13 +83,10 @@ def scrape_articles(urls):
             author = soup.find('div', {'class': 'origin cf'}).find('a').text.strip()
 
             # Get the date and time of publication
-            datetime_str = soup.find('div', {'class': 'origin cf'}).find('span').text.strip()
-            datetime_parts = datetime_str.split(',')
-            time = datetime_parts[0]
-            date = datetime_parts[1].strip()
+            date = links[url]
 
             # Write the article information to the CSV file
-            writer.writerow([title, text, author, date, time])
+            writer.writerow([title, text, author, date])
 
     print('Article information saved to articles.csv')
 
@@ -92,6 +94,7 @@ def scrape_articles(urls):
 #scrape_articles(people_daily_links())
 
 links = people_daily_links()
+print(len(links))
 
 
 
