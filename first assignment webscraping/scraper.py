@@ -56,6 +56,9 @@ def people_daily_links():
         # Decrement the page number
         page -= 1
 
+        if page < 6:
+            break
+
     return links
 
 
@@ -69,32 +72,63 @@ def scrape_articles(links):
             response = requests.get(url)
             soup = BeautifulSoup(response.text, 'html.parser')
 
-            # Get the title of the article
-            title = soup.find('h1').text.strip()
+            article_title = soup.select_one('body > div.main > div.w860.d2txtCon.cf > h1')
+            if article_title is not None:
+                article_title = article_title.text.strip()
+            else:
+                print("Bad url", url)
+                article_title  = article_title = "None"
 
-            # Get the text content of the article
-            text = ''
-            for p in soup.find_all('p'):
-                if p.text.strip():
-                    text += p.text.strip() + '\n'
-                
+            article_author = soup.select_one('body > div.main > div.w860.d2txtCon.cf > div.origin.cf > a')
+            if article_author is not None:
+                article_author = article_author.text.strip()
+            else:
+                print("Bad url", url)
+                article_author = "None"
 
-            # Get the author(s) of the article
-            author = soup.find('div', {'class': 'origin cf'}).find('a').text.strip()
+            article_content = ""
 
+            if soup.select('body > div.main > div.w860.d2txtCon.cf > p') is not None:
+                for p in soup.select('body > div.main > div.w860.d2txtCon.cf > p'):
+                    article_content += p.text.strip() + "\n"
+            else:
+                print("Bad url", url)
+                article_content = "None"
+            
             # Get the date and time of publication
             date = links[url]
 
             # Write the article information to the CSV file
-            writer.writerow([title, text, author, date])
+            writer.writerow([article_title, article_content, article_author, date])
 
     print('Article information saved to articles.csv')
+
+
+"""
+response = requests.get("http://en.people.cn/n3/2023/0303/c90000-10215655.html")
+soup = BeautifulSoup(response.text, 'html.parser')
+
+article_title = soup.select_one('body > div.main > div.w860.d2txtCon.cf > h1').text.strip()
+author_name = soup.select_one('body > div.main > div.w860.d2txtCon.cf > div.origin.cf > a').text.strip()
+content = ""
+for p in soup.select('body > div.main > div.w860.d2txtCon.cf > p'):
+    content += p.text.strip() + "\n"
+
+
+print('Title:', article_title)
+print('Author/Title:', author_name)
+print('Content:', content)
+
+"""
+
+
+
 
 # Scrape People's Daily
 #scrape_articles(people_daily_links())
 
 links = people_daily_links()
-print(len(links))
+scrape_articles(links)
 
 
 
