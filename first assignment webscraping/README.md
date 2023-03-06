@@ -9,3 +9,5 @@ Similarly, *pepoples_daily_articles.csv* is a file that contains all the scraped
 The scraping script for both Japan Times and People's Daily Online can be found on *scraper.py* which has comments to help explain the logic and structure for scraping the two different websites. 
 
 It was important to note here, that while scraping for the articles for People's Daily Online, there were several articles not formatted in the same way as most of the articles during this time period. The URLs to these articles can be found in *bad_urls.txt* and the respective scraping script for these specific articles is found in *peoplescraper.py*. I then appended these scraped results to *pepoples_daily_articles.csv* to complete the scraping assignment. 
+
+For the best experience in examining the csv files, I recommend opening with either Microsoft Excel or Google Sheets as it makes the data more readable.
