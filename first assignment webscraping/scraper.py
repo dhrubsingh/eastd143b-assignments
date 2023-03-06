@@ -179,3 +179,18 @@ def scrape_japan_times_articles(links):
 #scrape2(bad_urls)
 
 #scrape_japan_times_articles(links2)
+
+with open("peoplesdaily.csv", "r", newline="", encoding="utf-8") as input_file, \
+     open("peoples_daily_articles.csv", "w", newline="", encoding="utf-8") as output_file:
+
+    # create CSV reader and writer objects
+    reader = csv.DictReader(input_file)
+    writer = csv.DictWriter(output_file, fieldnames=["Title", "Text", "Author", "Date and Time"])
+
+    # write header row to output file
+    writer.writeheader()
+
+    # iterate over rows in input file, remove "Time" column, and rename "Date" column
+    for row in reader:
+        new_row = { "Title": row["Title"], "Text": row["Text"], "Author": row["Author"], "Date and Time": row["Date"] }
+        writer.writerow(new_row)
