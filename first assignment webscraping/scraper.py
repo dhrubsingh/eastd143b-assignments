@@ -173,61 +173,9 @@ def scrape_japan_times_articles(links):
 
     print('Article information saved to japan_times_articles.csv')
 
-
-
-
-# scrape2 = all the articles not formatted the usual way for People's Daily
-def scrape2(urls):
-    with open('bad_urls.txt', 'w') as f:
-        for url in urls:
-            f.write(url + '\n')
-
-            
-
-
-"""
-
-# test case Japan times
-response = requests.get("https://www.japantimes.co.jp/news/2023/01/01/world/global-new-years-celebrations/")
-soup = BeautifulSoup(response.text, 'html.parser')
-
-# Check if the article date is within the specified range
-article_date_str = soup.select_one('#wrapper > div > div.main_content.content_styles > article > div:nth-child(3) > div.single-upper-meta > div.meta-right > ul > li:nth-child(1) > time')['datetime']
-article_date = datetime.strptime(article_date_str, '%Y-%m-%dT%H:%M:%S%z')
-
-
-
- 
-# Get the title of the article
-article_title = soup.select_one('#wrapper > div > div.padding_block.single-title > h1').text.strip()
-
-
-# Get the text content of the article
-article_content = ''
-for p in soup.select('#jtarticle > p'):
-    article_content += p.text.strip() + '\n'
-
-# Get the author of the article
-article_author = soup.select_one('#wrapper > div > div.main_content.content_styles > article > div:nth-child(3) > div.single-upper-meta > div.meta-left > ul > li:nth-child(2) > p').text.strip()
-
-# Get the date and time of publication
-article_date_str = article_date.strftime('%Y-%m-%d')
-article_time_str = article_date.strftime('%H:%M')
-
-print(article_author, article_title,  article_content, article_date)
-
-"""
-
-
-
-
-
-
-
 # Scrape People's Daily
 #links = people_daily_links()
 #scrape_peopledaily(links)
 #scrape2(bad_urls)
 
-links2 = japan_times_links()
-scrape_japan_times_articles(links2)
+#scrape_japan_times_articles(links2)
