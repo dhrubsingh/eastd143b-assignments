@@ -180,6 +180,9 @@ def scrape_japan_times_articles(links):
 
 #scrape_japan_times_articles(links2)
 
+
+# modify CSV with correct columns
+
 with open("peoplesdaily.csv", "r", newline="", encoding="utf-8") as input_file, \
      open("peoples_daily_articles.csv", "w", newline="", encoding="utf-8") as output_file:
 
