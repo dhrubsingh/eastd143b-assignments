@@ -52,7 +52,7 @@ def save_results(results):
         writer = csv.writer(f)
         if not file_exists:
             writer.writerow(["File Name", "Extracted Text"])
-        #writer.writerow(["File Name", "Extracted Text"])
+        writer.writerow(["File Name", "Extracted Text"])
         writer.writerows(results)
 
 
