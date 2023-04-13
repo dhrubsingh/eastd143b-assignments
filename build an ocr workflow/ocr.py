@@ -24,7 +24,7 @@ def ocr_image(image, languages):
 
 def process_images(images, languages):
     """
-    Perform OCR on multiple images and return a list of tuples containing
+    Perform OCR on multiple images and return a list of dictionaries containing
     the file name and extracted text for each image.
     """
     results = []
@@ -35,8 +35,8 @@ def process_images(images, languages):
         # Perform OCR on the image
         text = ocr_image(img, languages)
 
-        # Add the results to the list
-        results.append((image.name, text))
+        # Add the results to the list as a dictionary with column names
+        results.append({"File Name": image.name, "Extracted Text": text})
 
     return results
 
@@ -83,6 +83,7 @@ if st.button("Save as CSV"):
     if results:
         # Save the results as a CSV file in local directory
         save_results(results)
+        st.success("Saved on local repository")
         
     else:
         st.warning("Please process images and extract text before saving as CSV.")
